@@ -11,6 +11,7 @@ import Wallet from './Screens/Wallet';
 
 import ExpenseIt from './Screens/ExpenseIt';
 import CameraScreen from './Screens/Camera';
+import ExpenseList from './Screens/ExpenseList';
 
 class RouterComponent extends Component {
     
@@ -80,6 +81,7 @@ class RouterComponent extends Component {
                     <Scene key="biz" icon={this.BizIcon}>
                         <Scene key="bizs" component={Biz} hideNavBar />
                         <Scene key="expenseIt" component={ExpenseIt} hideNavBar  />
+                        <Scene key="expenseList" component={ExpenseList} hideNavBar hideTabBar/>
                         <Scene key="camera" component={CameraScreen} hideNavBar hideTabBar />
                     </Scene>
 

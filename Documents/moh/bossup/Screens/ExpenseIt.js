@@ -14,16 +14,25 @@ class ExpenseIt extends Component {
             hasExpense: true,
             date: moment().format("MM/DD/YYYY"),
             amountLogged: '0,000.00',
-            amountEnterd: '0',
+            amountEnterd: null,
             expenseName: null,
-            expenses: []
+            expenses: [],
+            expenselist: true
         }
     }
 
     async submitExpense() {
-        let setExpense = await this.setState({amountLogged: this.state.amountEnterd})
 
-        let addExpense = await this.setState({expenses: [...this.state.expenses, {name: this.state.expenseName, amount: this.state.amountEnterd, date: this.state.date}]});
+        if (this.state.expenses.length > 0) {
+            let update = await this.setState({amountLogged: Number(this.state.amountEnterd) + this.state.amountLogged});
+        } else {
+            let setExpense = await this.setState({amountLogged: Number(this.state.amountEnterd), expenselist: true});
+        }
+
+        let addExpense = await this.setState({ expenses: [...this.state.expenses, {name: this.state.expenseName, amount: this.state.amountEnterd, date: this.state.date}]});
+
+
+        let clearForm = await this.setState({amountEnterd: null, dare: moment().format("MM/DD/YYYY"), expenseName: null});
 
     }
 
@@ -42,7 +51,7 @@ class ExpenseIt extends Component {
     render() {
         return (
             <View style={{flex: 1}}>
-                <MainHeader title={false}/>
+                <MainHeader title={false} listIcon={this.state.expenselist}/>
                 <View style={styles.topBar}>
                     <Text style={styles.moneyText}>${this.state.amountLogged}</Text>
                     <Text style={styles.subText}>Amount Logged</Text>
@@ -70,6 +79,7 @@ class ExpenseIt extends Component {
                                     <View style={styles.row}>
                                         <Text style={{fontSize: 16}}>Expense: </Text>
                                         <TextInput
+                                        value={this.state.expenseName}
                                         style={styles.input1}
                                         placeholder={'Expense Name'}
                                         autoCorrect={false}
@@ -105,10 +115,10 @@ class ExpenseIt extends Component {
                                                 },
                                                 dateText: {
                                                     fontSize: 15
-                                                },
+                                                }
                                             }}
                                             onDateChange={ (date) => {
-                                                this.setState({dateError: false});
+                                                this.setState({date: date});
                                             }}
                                         />
                                     </View>
@@ -117,6 +127,7 @@ class ExpenseIt extends Component {
                                         <View style={{display: 'flex', flexDirection: 'row'}}>
                                             <Text style={styles.money}>$</Text>
                                             <TextInput
+                                            value={this.state.amountEnterd}
                                             returnKeyType="done"
                                             keyboardType="numeric"
                                             style={styles.input}
@@ -134,9 +145,13 @@ class ExpenseIt extends Component {
                                             </TouchableOpacity>
                                             <Text style={styles.cameratxt}>RECEIPT CAPTURE</Text>
                                         </View>
-                                        <TouchableOpacity onPress={() => this.submitExpense()}>
-                                            <Button bgColor="#2fabb2" txtSize={15} width={100} text="SUBMIT"/>
+
+                                        <TouchableOpacity onPress={() => {
+                                            this.state.amountEnterd && this.state.expenseName ? this.submitExpense() : alert('Enter name or cost');
+                                        }}>
+                                            <Button bgColor={ this.state.amountEnterd && this.state.expenseName ? "#2fabb2" : '#ebeced'} txtSize={15} width={100} text="SUBMIT"/>
                                         </TouchableOpacity>
+                                        
                                     </View>
                                 </View>
                             </View>

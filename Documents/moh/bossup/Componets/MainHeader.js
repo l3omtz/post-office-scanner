@@ -7,6 +7,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { Icon } from 'native-base';
+import { Actions } from 'react-native-router-flux';
 
 class MainHeader extends Component {
 
@@ -17,14 +18,22 @@ class MainHeader extends Component {
     }
 
     render() {
-        const { text, iconName, title } = this.props;
+        const { text, iconName, title, listData } = this.props;
         return (
         <View style={styles.container}>
             <View style={styles.topRow}>
                 <Image source={require('../assets/images/logoWhite.png')} style={{width: 26, height: 28}}/>
-                <TouchableOpacity style={{position: 'absolute', right: 20}}>
-                    <Icon type="EvilIcons" name="gear" style={styles.rightIcon}/>
-                </TouchableOpacity>
+                <View style={styles.rightIcons}>
+                    {
+                        this.props.listIcon &&    
+                            <TouchableOpacity onPress={ () => Actions.expenseList(listData)}>
+                                <Icon type="Feather" name="list" style={styles.listIcon}/>
+                            </TouchableOpacity>
+                    }
+                    <TouchableOpacity>
+                        <Icon type="EvilIcons" name="gear" style={styles.rightIcon}/>
+                    </TouchableOpacity>
+                </View>
             </View> 
             {
                 title &&
@@ -67,11 +76,24 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: 'white'
   },
+  listIcon: {
+    fontSize: 25,
+    color: 'white',
+    paddingRight: 6
+  },
   text: {
     color: 'white',
     fontSize: 20,
     fontWeight: '400',
     paddingTop: 10
+  },
+  rightIcons: {
+    position: 'absolute',
+    right: 20,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent:'center',
+    alignItems: 'center'
   }
 });
 
