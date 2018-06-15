@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image, ScrollView } from 'react-native';
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
 import { Actions } from 'react-native-router-flux';
 
-import { MainHeader, Button } from '../Componets';
+import { MainHeader, Button, ExpenseCard } from '../Componets';
 
 class ExpenseIt extends Component {
 
@@ -13,16 +13,38 @@ class ExpenseIt extends Component {
         this.state ={ 
             hasExpense: true,
             date: moment().format("MM/DD/YYYY"),
+            amountLogged: '0,000.00',
+            amountEnterd: '0',
+            expenseName: null,
+            expenses: []
         }
     }
 
+    async submitExpense() {
+        let setExpense = await this.setState({amountLogged: this.state.amountEnterd})
+
+        let addExpense = await this.setState({expenses: [...this.state.expenses, {name: this.state.expenseName, amount: this.state.amountEnterd, date: this.state.date}]});
+
+    }
+
+    getexpensesCards() {
+        if (this.state.expenses.length > 0) {
+            return this.state.expenses.map((expense, key) => {
+                return (
+                    <View key={key}>
+                        <ExpenseCard key={key} name={expense.name} date={expense.date} amount={expense.amount}/>
+                    </View>
+                )
+            })
+        }
+    }
 
     render() {
         return (
             <View style={{flex: 1}}>
                 <MainHeader title={false}/>
                 <View style={styles.topBar}>
-                    <Text style={styles.moneyText}>$0,000.00</Text>
+                    <Text style={styles.moneyText}>${this.state.amountLogged}</Text>
                     <Text style={styles.subText}>Amount Logged</Text>
                 </View>
                 <View style={styles.container}>
@@ -41,77 +63,93 @@ class ExpenseIt extends Component {
                     {
                         this.state.hasExpense &&
                         <View>
-                            <Text style={styles.header}>ADD NEW EXPENSE</Text>
+                            <View>
+                                <Text style={styles.header}>ADD NEW EXPENSE</Text>
 
-                            <View style={{paddingTop: 20}}>
-                                <View style={styles.row}>
-                                    <Text style={{fontSize: 16}}>Expense: </Text>
-                                    <TextInput
-                                    style={styles.input1}
-                                    placeholder={'Expense Name'}
-                                    autoCorrect={false}
-                                    autoCapitalize="none"
-                                    />
-                                </View>
-                                <View style={styles.row}>
-                                    <Text style={{fontSize: 16}}>Date: </Text>
-                                    <DatePicker
-                                        style={{width: 210}}
-                                        date={this.state.date}
-                                        mode="date"
-                                        format="MM-DD-YYYY"
-                                        minDate="05-01-1970"
-                                        maxDate="06-01-2020"
-                                        confirmBtnText="Confirm"
-                                        cancelBtnText="Cancel"
-                                        placeholder="Set event date"
-                                        customStyles={{
-                                            dateIcon: {
-                                                display:'none'
-                                            },
-                                            dateInput: {
-                                                borderColor:'#9b9b9b',
-                                                borderTopWidth: 0,
-                                                borderRightWidth: 0,
-                                                borderLeftWidth: 0,
-                                                borderBottomWidth: 0.5,
-                                                width: '100%',
-                                                height: 20,
-                                                alignItems: 'flex-start'
-                                            },
-                                            dateText: {
-                                                fontSize: 15
-                                            },
-                                        }}
-                                        onDateChange={ (date) => {
-                                            this.setState({dateError: false});
-                                        }}
-                                    />
-                                </View>
-                                <View style={styles.row}>
-                                    <Text style={{fontSize: 16}}>Cost: </Text>
-                                    <View style={{display: 'flex', flexDirection: 'row'}}>
-                                        <Text style={styles.money}>$</Text>
+                                <View style={{paddingTop: 20}}>
+                                    <View style={styles.row}>
+                                        <Text style={{fontSize: 16}}>Expense: </Text>
                                         <TextInput
-                                        keyboardType="numeric"
-                                        style={styles.input}
-                                        placeholder={'0.00'}
+                                        style={styles.input1}
+                                        placeholder={'Expense Name'}
                                         autoCorrect={false}
                                         autoCapitalize="none"
+                                        onChangeText={(text => this.setState({expenseName: text}))}
                                         />
                                     </View>
-                                </View>
-                                <View style={styles.rowLast}>
-                                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                                        <TouchableOpacity onPress={ () => Actions.camera()}>
-                                            <Image source={require('../assets/images/camera.png')} style={{height: 40, width: 40}}/>
-                                        </TouchableOpacity>
-                                        <Text style={styles.cameratxt}>RECEIPT CAPTURE</Text>
+                                    <View style={styles.row}>
+                                        <Text style={{fontSize: 16}}>Date: </Text>
+                                        <DatePicker
+                                            style={{width: 210}}
+                                            date={this.state.date}
+                                            mode="date"
+                                            format="MM-DD-YYYY"
+                                            minDate="05-01-1970"
+                                            maxDate="06-01-2020"
+                                            confirmBtnText="Confirm"
+                                            cancelBtnText="Cancel"
+                                            placeholder="Set event date"
+                                            customStyles={{
+                                                dateIcon: {
+                                                    display:'none'
+                                                },
+                                                dateInput: {
+                                                    borderColor:'#9b9b9b',
+                                                    borderTopWidth: 0,
+                                                    borderRightWidth: 0,
+                                                    borderLeftWidth: 0,
+                                                    borderBottomWidth: 0.5,
+                                                    width: '100%',
+                                                    height: 20,
+                                                    alignItems: 'flex-start'
+                                                },
+                                                dateText: {
+                                                    fontSize: 15
+                                                },
+                                            }}
+                                            onDateChange={ (date) => {
+                                                this.setState({dateError: false});
+                                            }}
+                                        />
                                     </View>
-                                    <Button bgColor="#2fabb2" txtSize={15} width={100} text="SUBMIT"/>
+                                    <View style={styles.row}>
+                                        <Text style={{fontSize: 16}}>Cost: </Text>
+                                        <View style={{display: 'flex', flexDirection: 'row'}}>
+                                            <Text style={styles.money}>$</Text>
+                                            <TextInput
+                                            returnKeyType="done"
+                                            keyboardType="numeric"
+                                            style={styles.input}
+                                            placeholder={'0.00'}
+                                            autoCorrect={false}
+                                            autoCapitalize="none"
+                                            onChangeText={(text) => this.setState({amountEnterd: text})}
+                                            />
+                                        </View>
+                                    </View>
+                                    <View style={styles.rowLast}>
+                                        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                                            <TouchableOpacity onPress={ () => Actions.camera()}>
+                                                <Image source={require('../assets/images/camera.png')} style={{height: 40, width: 40}}/>
+                                            </TouchableOpacity>
+                                            <Text style={styles.cameratxt}>RECEIPT CAPTURE</Text>
+                                        </View>
+                                        <TouchableOpacity onPress={() => this.submitExpense()}>
+                                            <Button bgColor="#2fabb2" txtSize={15} width={100} text="SUBMIT"/>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             </View>
                         </View>
+                    }
+                </View>
+
+                <View style={{flex: 1, backgroundColor: 'white'}}>
+                    {
+                        this.state.hasExpense &&
+                            <ScrollView horizontal={true} bounces={true} style={{position: 'absolute', bottom: 60}}>
+                                {this.getexpensesCards()}
+                            </ScrollView>
                     }
                 </View>
             </View>
