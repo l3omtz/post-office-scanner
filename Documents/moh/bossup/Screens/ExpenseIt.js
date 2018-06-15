@@ -12,9 +12,10 @@ class ExpenseIt extends Component {
         super();
         this.state ={ 
             hasExpense: true,
-            date: moment().format("MM/DD/YYYY")
+            date: moment().format("MM/DD/YYYY"),
         }
     }
+
 
     render() {
         return (
@@ -102,7 +103,7 @@ class ExpenseIt extends Component {
                                 </View>
                                 <View style={styles.rowLast}>
                                     <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                                        <TouchableOpacity>
+                                        <TouchableOpacity onPress={ () => Actions.camera()}>
                                             <Image source={require('../assets/images/camera.png')} style={{height: 40, width: 40}}/>
                                         </TouchableOpacity>
                                         <Text style={styles.cameratxt}>RECEIPT CAPTURE</Text>

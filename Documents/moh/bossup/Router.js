@@ -10,6 +10,7 @@ import Earn from './Screens/Earn';
 import Wallet from './Screens/Wallet';
 
 import ExpenseIt from './Screens/ExpenseIt';
+import CameraScreen from './Screens/Camera';
 
 class RouterComponent extends Component {
     
@@ -77,8 +78,9 @@ class RouterComponent extends Component {
                 <Scene key="main" tabs showLabel={false} hideNavBar type={ActionConst.RESET} tabBarStyle={style.tabBarStyle}>
 
                     <Scene key="biz" icon={this.BizIcon}>
-                        <Scene key="bizs" component={Biz} hideNavBar  />
+                        <Scene key="bizs" component={Biz} hideNavBar />
                         <Scene key="expenseIt" component={ExpenseIt} hideNavBar  />
+                        <Scene key="camera" component={CameraScreen} hideNavBar hideTabBar />
                     </Scene>
 
                     <Scene key="profile" icon={this.ProfileIcon}>

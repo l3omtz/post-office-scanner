@@ -6,14 +6,15 @@ import {
 
 class Button extends Component {
   render() {
-    const { bgColor, txtSize, width, borderColor, text } = this.props;
+    const { bgColor, txtSize, width, borderColor, text, borderWidth } = this.props;
 
     return (
       <View style={{
         width: width,
         backgroundColor: bgColor,
         borderRadius: 5,
-        borderColor: borderColor
+        borderColor: borderColor,
+        borderWidth: borderWidth
       }}>
         <Text style={{
           alignSelf: 'center',
