@@ -3,7 +3,6 @@ import { View, TouchableOpacity, StyleSheet, TextInput, Image, ScrollView } from
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
 import { Actions } from 'react-native-router-flux';
-import { Icon } from 'native-base';
 import { Container, Content, List, ListItem, Left, Body, Right, Icon, Text } from 'native-base';
 
 
@@ -32,27 +31,37 @@ class ExpenseList extends Component {
                             <Icon type="Ionicons" name="ios-arrow-back" style={{color: 'white'}}/>
                         </TouchableOpacity>
                         <Text style={{color: 'white', fontSize: 20}}>List View</Text>
-                        <TouchableOpacity onPress={ () => Actions.pop()}>
+                        <TouchableOpacity onPress={ () => Actions.expenseFilter()}>
                             <Icon type="MaterialIcons" name="filter-list" style={{color: 'white'}}/>
                         </TouchableOpacity>
                 </View>
                 <Container>
                     <Content>
+                        <View style={styles.infoBar}>
+                            <Text style={styles.infoText}>Expense</Text>
+                            <Text style={styles.infoText}>Cost/month</Text>
+                        </View>
                     <List>
-                        <ListItem avatar>
-                        <Left>
-                        <TouchableOpacity>
-                            <Icon type="Ionicons" name="ios-copy-outline" style={styles.icon}/>
-                        </TouchableOpacity>
-                        </Left>
-                        <Body>
-                            <Text>Kumar Pratik</Text>
-                            <Text note>Doing what you like will always keep you happy . .</Text>
-                        </Body>
-                        <Right>
-                            <Text note>3:43 pm</Text>
-                        </Right>
-                        </ListItem>
+                        {
+                            this.props.listData.map( (expense, key) => {
+                                return (
+                                    <ListItem avatar key={key}>
+                                        <Left>
+                                        <TouchableOpacity>
+                                            <Icon type="Ionicons" name="ios-copy-outline" style={styles.icon}/>
+                                        </TouchableOpacity>
+                                        </Left>
+                                        <Body>
+                                            <Text style={styles.name}>{expense.name}</Text>
+                                            <Text note>{expense.date}</Text>
+                                        </Body>
+                                        <Right style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                                            <Text note style={styles.amount}>${expense.amount}</Text>
+                                        </Right>
+                                    </ListItem>
+                                );
+                            })
+                        }
                     </List>
                     </Content>
                 </Container>
@@ -79,7 +88,31 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         paddingLeft: 10,
         paddingRight: 10
-    }
+    },
+    infoBar: {
+        backgroundColor: '#4a4a4a',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 20,
+        flexDirection: 'row'
+    },
+    infoText: {
+        color: 'white',
+        fontSize: 20,
+        fontWeight: '300'
+    },
+    name: {
+        fontSize: 20,
+    },
+    amount: {
+        color: '#2fabb2',
+        fontSize: 19
+    },
+    icon: {
+        color: 'gray',
+        fontSize: 30
+    },
   });
 
 

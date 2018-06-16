@@ -10,16 +10,18 @@ import Earn from './Screens/Earn';
 import Wallet from './Screens/Wallet';
 
 import ExpenseIt from './Screens/ExpenseIt';
-import CameraScreen from './Screens/Camera';
 import ExpenseList from './Screens/ExpenseList';
+import ExpenseFilter from './Screens/ExpenseFilter';
+import CameraScreen from './Screens/Camera';
+
 
 class RouterComponent extends Component {
     
     // Tab Icons
-    ProfileIcon = ({selected, title}) => {
-        if(selected){
+    ProfileIcon = (props) => {
+        if(props.focused){
             return (
-                <Image source={require('./assets/images/meIcon2.png')} style={{height: 25, width: 25}}/>
+                <Image source={require('./assets/images/meIcon3.png')} style={{height: 25, width: 25}}/>
             )
         }else{
             return(
@@ -27,32 +29,32 @@ class RouterComponent extends Component {
             )
         }
     };
-    BizIcon = ({selected, title}) => {
-        if(selected){
+    BizIcon = (props) => {
+        if(props.focused){
             return (
                 <Image source={require('./assets/images/bizIcon3.png')} style={{height: 25, width: 25}}/>
             )
         }else{
             return(
-                <Image source={require('./assets/images/bizIcon3.png')} style={{height: 25, width: 25}}/>
+                <Image source={require('./assets/images/bizIcon2.png')} style={{height: 25, width: 25}}/>
             )
         }
     };
-    HomeIcon = ({selected, title}) => {
-        if(selected){
+    HomeIcon = (props) => {
+        if(props.focused){
             return (
-                <Image source={require('./assets/images/homeicon2.png')} style={{height: 25, width: 25}}/>
+                <Image source={require('./assets/images/homeicon2.png')} style={{height: 60, width: 60, top: -15}}/>
             )
         }else{
             return(
-                <Image source={require('./assets/images/homeicon2.png')} style={{height: 25, width: 25}}/>
+                <Image source={require('./assets/images/homeicon2.png')} style={{height: 60, width: 60, top: -15,}}/>
             )
         }
     };
-    EarnIcon = ({selected, title}) => {
-        if(selected){
+    EarnIcon = (props) => {
+        if(props.focused){
             return (
-                <Image source={require('./assets/images/earnIcon2.png')} style={{height: 25, width: 25}}/>
+                <Image source={require('./assets/images/earnIcon3.png')} style={{height: 25, width: 25}}/>
             )
         }else{
             return(
@@ -60,10 +62,10 @@ class RouterComponent extends Component {
             )
         }
     };
-    WalletIcon = ({selected, title}) => {
-        if(selected){
+    WalletIcon = (props) => {
+        if(props.focused){
             return (
-                <Image source={require('./assets/images/walletIcon2.png')} style={{height: 25, width: 25}}/>
+                <Image source={require('./assets/images/walletIcon3.png')} style={{height: 25, width: 25}}/>
             )
         }else{
             return(
@@ -77,16 +79,16 @@ class RouterComponent extends Component {
             <Router>
 
                 <Scene key="main" tabs showLabel={false} hideNavBar type={ActionConst.RESET} tabBarStyle={style.tabBarStyle}>
+                    <Scene key="profile" icon={this.ProfileIcon}>
+                        <Scene key="profiles" component={Profile} hideNavBar />
+                    </Scene>
 
                     <Scene key="biz" icon={this.BizIcon}>
                         <Scene key="bizs" component={Biz} hideNavBar />
                         <Scene key="expenseIt" component={ExpenseIt} hideNavBar  />
                         <Scene key="expenseList" component={ExpenseList} hideNavBar hideTabBar/>
+                        <Scene key="expenseFilter" component={ExpenseFilter} hideNavBar hideTabBar/>
                         <Scene key="camera" component={CameraScreen} hideNavBar hideTabBar />
-                    </Scene>
-
-                    <Scene key="profile" icon={this.ProfileIcon}>
-                        <Scene key="profiles" component={Profile} hideNavBar />
                     </Scene>
 
                     <Scene key="home" icon={this.HomeIcon}>

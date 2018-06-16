@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image, ScrollView 
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
 import { Actions } from 'react-native-router-flux';
+import MonthSelectorCalendar from 'react-native-month-selector';
+moment.locale('en');
 
 import { MainHeader, Button, ExpenseCard } from '../Componets';
 
@@ -11,13 +13,14 @@ class ExpenseIt extends Component {
     constructor(){
         super();
         this.state ={ 
-            hasExpense: true,
-            date: moment().format("MM/DD/YYYY"),
+            hasExpense: false,
+            date: moment(),
             amountLogged: '0,000.00',
             amountEnterd: null,
             expenseName: null,
             expenses: [],
-            expenselist: true
+            expenselist: true,
+            showCalendar: false,
         }
     }
 
@@ -36,6 +39,10 @@ class ExpenseIt extends Component {
 
     }
 
+    showCalendar() {
+        this.setState({showCalendar: !this.state.showCalendar})
+    }
+
     getexpensesCards() {
         if (this.state.expenses.length > 0) {
             return this.state.expenses.map((expense, key) => {
@@ -50,8 +57,16 @@ class ExpenseIt extends Component {
 
     render() {
         return (
-            <View style={{flex: 1}}>
-                <MainHeader title={false} listIcon={this.state.expenselist}/>
+            <View style={{flex: 1, backgroundColor: 'white'}}>
+                <MainHeader logo={false} title={false} listIcon={this.state.expenselist} listData={this.state.expenses} calendar={this.state.date} showCalendar={this.state.showCalendar} action={this.showCalendar.bind(this)}/>
+                {
+                    this.state.showCalendar &&
+                    <MonthSelectorCalendar
+                        selectedDate={this.state.date}
+                        containerStyle={styles.calendarContainer}
+                        monthTapped={(date) => this.setState({ date: date })}
+                    />
+                }
                 <View style={styles.topBar}>
                     <Text style={styles.moneyText}>${this.state.amountLogged}</Text>
                     <Text style={styles.subText}>Amount Logged</Text>
@@ -159,10 +174,10 @@ class ExpenseIt extends Component {
                     }
                 </View>
 
-                <View style={{flex: 1, backgroundColor: 'white'}}>
+                <View style={{flex: 1, backgroundColor: 'white', marginTop: 30}}>
                     {
                         this.state.hasExpense &&
-                            <ScrollView horizontal={true} bounces={true} style={{position: 'absolute', bottom: 60}}>
+                            <ScrollView horizontal={true} bounces={true} style={{position: 'absolute', bottom: 60, width:'100%'}}>
                                 {this.getexpensesCards()}
                             </ScrollView>
                     }
@@ -270,6 +285,14 @@ const styles = StyleSheet.create({
         paddingTop: 5, 
         fontWeight: '300', 
         fontSize: 12
+    },
+    calendarContainer: {
+        width: '100%',
+        position: 'absolute',
+        zIndex: 100000,
+        top:85,
+        borderColor: '#2fabb2', 
+        borderWidth: 2
     }
   });
 

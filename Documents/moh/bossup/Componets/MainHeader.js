@@ -8,8 +8,15 @@ import {
 } from 'react-native';
 import { Icon } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-
+import moment from 'moment';
+moment.locale('en');
 class MainHeader extends Component {
+
+    constructor(){
+        super();
+        this.state ={ 
+        }
+    }
 
     renderIcon(icon) {
         if (icon === 'bizIconW') {
@@ -17,20 +24,37 @@ class MainHeader extends Component {
         }
     }
 
-    render() {
-        const { text, iconName, title, listData } = this.props;
+    render() { 
+        const { logo, text, iconName, title, listData, calendar, showCalendar } = this.props;
         return (
         <View style={styles.container}>
             <View style={styles.topRow}>
-                <Image source={require('../assets/images/logoWhite.png')} style={{width: 26, height: 28}}/>
+                {
+                    logo &&
+                    <Image source={require('../assets/images/logoWhite.png')} style={{width: 26, height: 28}}/>
+                }
+                {
+                    calendar &&
+                    <TouchableOpacity onPress={() => this.props.action()} style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row'}}>
+                        <Text style={{color: 'white', fontSize: 25, fontWeight: '600'}}>{moment(new Date(calendar)).format('MMMM')}</Text>
+                        {
+                            showCalendar &&
+                            <Icon type="EvilIcons" name="chevron-up" style={styles.rightIcon}/>   
+                        }
+                        {
+                            !showCalendar &&
+                            <Icon type="EvilIcons" name="chevron-down" style={styles.rightIcon}/>   
+                        }
+                    </TouchableOpacity>
+                }
                 <View style={styles.rightIcons}>
                     {
                         this.props.listIcon &&    
-                            <TouchableOpacity onPress={ () => Actions.expenseList(listData)}>
+                            <TouchableOpacity onPress={ () => Actions.expenseList({listData: listData})}>
                                 <Icon type="Feather" name="list" style={styles.listIcon}/>
                             </TouchableOpacity>
                     }
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.action()}>
                         <Icon type="EvilIcons" name="gear" style={styles.rightIcon}/>
                     </TouchableOpacity>
                 </View>

@@ -10,7 +10,7 @@ class Biz extends Component {
     render() {
         return (
             <View style={{flex: 1}}>
-                <MainHeader text="BIZ" iconName="bizIconW" title={true}/>
+                <MainHeader logo={true} text="BIZ" iconName="bizIconW" title={true}/>
                 <View style={styles.container}>
                     <View style={styles.row}>
                         <View style={styles.centerGroup}>
