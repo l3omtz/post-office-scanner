@@ -29,6 +29,14 @@ class MainHeader extends Component {
         return (
         <View style={styles.container}>
             <View style={styles.topRow}>
+                <View style={styles.leftIcons}>
+                    {
+                        this.props.calendar &&    
+                            <TouchableOpacity onPress={ () => Actions.pop()}>
+                                <Icon type="Ionicons" name="ios-arrow-back" style={{color: 'white'}}/>
+                            </TouchableOpacity>
+                    }
+                </View>
                 {
                     logo &&
                     <Image source={require('../assets/images/logoWhite.png')} style={{width: 26, height: 28}}/>
@@ -54,7 +62,7 @@ class MainHeader extends Component {
                                 <Icon type="Feather" name="list" style={styles.listIcon}/>
                             </TouchableOpacity>
                     }
-                    <TouchableOpacity onPress={() => this.props.action()}>
+                    <TouchableOpacity>
                         <Icon type="EvilIcons" name="gear" style={styles.rightIcon}/>
                     </TouchableOpacity>
                 </View>
@@ -114,6 +122,14 @@ const styles = StyleSheet.create({
   rightIcons: {
     position: 'absolute',
     right: 20,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent:'center',
+    alignItems: 'center'
+  },
+  leftIcons: {
+    position: 'absolute',
+    left: 20,
     display: 'flex',
     flexDirection: 'row',
     justifyContent:'center',
